@@ -1,0 +1,804 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ===== DESIGN SYSTEM ===== */
+/* Light theme (default) and dark theme via .dark class */
+
+@layer base {
+  :root {
+    color-scheme: light;
+
+    /* Core surfaces */
+    --background: 0 0% 98%;
+    --foreground: 220 14% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 14% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 14% 14%;
+
+    /* Brand accent — electric indigo */
+    --primary: 247 84% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Sidebar surface */
+    --secondary: 220 14% 94%;
+    --secondary-foreground: 220 14% 28%;
+
+    /* Muted */
+    --muted: 220 14% 92%;
+    --muted-foreground: 220 8% 42%;
+
+    /* Accent hover */
+    --accent: 220 14% 90%;
+    --accent-foreground: 220 14% 18%;
+
+    /* Destructive */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders */
+    --border: 220 14% 88%;
+    --input: 220 14% 90%;
+    --ring: 247 84% 67%;
+
+    --radius: 0.5rem;
+
+    /* Editor specific */
+    --editor-bg: 0 0% 99%;
+    --editor-surface: 0 0% 100%;
+    --editor-line: 220 14% 92%;
+    --editor-text: 220 14% 16%;
+    --editor-muted: 220 8% 40%;
+
+    /* Code blocks / CodeMirror */
+    --code-bg: 220 14% 94%;
+    --code-gutter-bg: 220 12% 96%;
+    --code-gutter-active-bg: 220 14% 90%;
+
+    /* Sidebar */
+    --sidebar-background: 220 14% 96%;
+    --sidebar-foreground: 220 14% 28%;
+    --sidebar-primary: 247 84% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 90%;
+    --sidebar-accent-foreground: 220 14% 18%;
+    --sidebar-border: 220 14% 88%;
+    --sidebar-ring: 247 84% 67%;
+
+    /* Status / semantic */
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --info: 199 89% 48%;
+
+    /* Overlay (modals, zen, shadows) */
+    --overlay: 0 0% 0%;
+    --overlay-alpha: 0.35;
+
+    /* Bubble menu */
+    --bubble-bg: 0 0% 100%;
+
+    /* Glow / gradients */
+    --glow-primary: 247 84% 67%;
+    --shadow-editor: 0 0 0 1px hsl(var(--border));
+    --gradient-editor: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--editor-bg)) 100%);
+    --gradient-sidebar: linear-gradient(180deg, hsl(var(--sidebar-background)) 0%, hsl(220 14% 94%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(247 84% 67%) 0%, hsl(263 84% 72%) 100%);
+
+    /* Syntax highlighting (light theme) */
+    --hljs-keyword: 263 70% 45%;
+    --hljs-string: 142 45% 38%;
+    --hljs-number: 28 80% 48%;
+    --hljs-comment: 220 10% 48%;
+    --hljs-title: 199 70% 42%;
+    --hljs-type: 38 75% 42%;
+    --hljs-function: 45 80% 42%;
+    --hljs-meta: 220 12% 42%;
+    --hljs-tag: 0 55% 45%;
+    --hljs-attribute: 32 85% 42%;
+    --hljs-variable: 188 55% 38%;
+    --hljs-selector: 160 45% 35%;
+    --hljs-addition: 120 45% 38%;
+    --hljs-deletion: 0 55% 45%;
+  }
+
+  .dark {
+    color-scheme: dark;
+
+    /* Core surfaces */
+    --background: 220 16% 8%;
+    --foreground: 220 10% 88%;
+
+    --card: 220 14% 10%;
+    --card-foreground: 220 10% 88%;
+
+    --popover: 220 16% 9%;
+    --popover-foreground: 220 10% 88%;
+
+    --primary: 247 84% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 12%;
+    --secondary-foreground: 220 10% 72%;
+
+    --muted: 220 14% 14%;
+    --muted-foreground: 220 8% 48%;
+
+    --accent: 220 14% 16%;
+    --accent-foreground: 220 10% 88%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 14% 16%;
+    --input: 220 14% 14%;
+    --ring: 247 84% 67%;
+
+    --editor-bg: 220 18% 7%;
+    --editor-surface: 220 16% 9%;
+    --editor-line: 220 14% 15%;
+    --editor-text: 220 10% 90%;
+    --editor-muted: 220 8% 44%;
+
+    --code-bg: 220 20% 5%;
+    --code-gutter-bg: 220 18% 6%;
+    --code-gutter-active-bg: 220 14% 12%;
+
+    --sidebar-background: 220 16% 7%;
+    --sidebar-foreground: 220 8% 68%;
+    --sidebar-primary: 247 84% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 13%;
+    --sidebar-accent-foreground: 220 10% 82%;
+    --sidebar-border: 220 14% 13%;
+    --sidebar-ring: 247 84% 67%;
+
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --info: 199 89% 48%;
+
+    --overlay: 0 0% 0%;
+    --overlay-alpha: 0.5;
+
+    --bubble-bg: 220 16% 10%;
+
+    --glow-primary: 247 84% 67%;
+    --shadow-editor: 0 0 0 1px hsl(var(--border));
+    --gradient-editor: linear-gradient(180deg, hsl(220 16% 8%) 0%, hsl(220 18% 7%) 100%);
+    --gradient-sidebar: linear-gradient(180deg, hsl(220 16% 7%) 0%, hsl(220 14% 6%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(247 84% 67%) 0%, hsl(263 84% 72%) 100%);
+
+    /* Syntax highlighting (dark theme) */
+    --hljs-keyword: 280 70% 75%;
+    --hljs-string: 95 55% 70%;
+    --hljs-number: 30 90% 70%;
+    --hljs-comment: 220 15% 55%;
+    --hljs-title: 200 80% 75%;
+    --hljs-type: 40 75% 70%;
+    --hljs-function: 50 95% 75%;
+    --hljs-meta: 220 20% 60%;
+    --hljs-tag: 10 70% 75%;
+    --hljs-attribute: 45 90% 70%;
+    --hljs-variable: 180 60% 70%;
+    --hljs-selector: 160 60% 65%;
+    --hljs-addition: 120 50% 60%;
+    --hljs-deletion: 0 65% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code, pre, .mono {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+}
+
+/* ===== TIPTAP EDITOR STYLES ===== */
+@layer components {
+  .tiptap-editor {
+    @apply outline-none;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: hsl(var(--editor-text));
+    caret-color: hsl(var(--primary));
+    min-height: calc(100vh - 120px);
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+  }
+
+  .tiptap-editor p {
+    margin: 0 0 0.75em;
+  }
+
+  .tiptap-editor h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin: 1.5em 0 0.5em;
+    color: hsl(var(--foreground));
+  }
+
+  .tiptap-editor h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin: 1.4em 0 0.4em;
+    color: hsl(var(--foreground));
+  }
+
+  .tiptap-editor h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    margin: 1.3em 0 0.3em;
+    color: hsl(var(--foreground));
+  }
+
+  .tiptap-editor blockquote {
+    border-left: 3px solid hsl(var(--primary) / 0.6);
+    padding: 0.25em 0 0.25em 1.25em;
+    margin: 1em 0;
+    color: hsl(var(--muted-foreground));
+    font-style: italic;
+  }
+
+  .tiptap-editor code {
+    font-family: 'JetBrains Mono', monospace;
+    background: hsl(var(--muted));
+    color: hsl(var(--primary));
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.875em;
+  }
+
+  .tiptap-editor pre {
+    background: hsl(var(--code-bg));
+    border: 1px solid hsl(var(--border));
+    border-radius: 8px;
+    padding: 1.25em;
+    margin: 1.25em 0;
+    overflow-x: auto;
+  }
+
+  /* Code block – CodeMirror 6 */
+  .tiptap-editor .code-block-codemirror-wrapper {
+    background: hsl(var(--code-bg));
+    border: 1px solid hsl(var(--border));
+    border-radius: 8px;
+    margin: 1.25em 0;
+    overflow: hidden;
+  }
+
+  /* Notion-style code block header: language + copy */
+  .tiptap-editor .code-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 12px 6px 14px;
+    background: hsl(var(--code-gutter-bg));
+    border-bottom: 1px solid hsl(var(--border));
+    min-height: 36px;
+  }
+
+  .tiptap-editor .code-block-lang-pill,
+  .tiptap-editor .code-block-lang-select {
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: hsl(var(--muted-foreground));
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  .tiptap-editor .code-block-lang-select {
+    background: hsl(var(--muted) / 0.5);
+    border: 1px solid hsl(var(--border));
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+
+  .tiptap-editor .code-block-lang-select:hover {
+    background: hsl(var(--accent));
+    color: hsl(var(--foreground));
+  }
+
+  .tiptap-editor .code-block-lang-select:focus {
+    border-color: hsl(var(--primary) / 0.6);
+    color: hsl(var(--foreground));
+  }
+
+  .tiptap-editor .code-block-copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+
+  .tiptap-editor .code-block-copy-btn:hover {
+    background: hsl(var(--accent));
+    color: hsl(var(--foreground));
+  }
+
+  .tiptap-editor .code-block-copy-label {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  .tiptap-editor .code-block-codemirror {
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: 0.9em;
+  }
+
+  .tiptap-editor .code-block-codemirror .cm-editor {
+    background: transparent;
+  }
+
+  .tiptap-editor .code-block-codemirror .cm-scroller {
+    font-family: inherit;
+    line-height: 1.6;
+    padding: 1.25em 1.25em 1.25em 0;
+  }
+
+  .tiptap-editor .code-block-codemirror .cm-content {
+    padding: 0 1.25em;
+    caret-color: hsl(var(--primary));
+  }
+
+  .tiptap-editor .code-block-codemirror .cm-gutters {
+    background: hsl(var(--code-gutter-bg));
+    border-right: 1px solid hsl(var(--border));
+    color: hsl(var(--editor-muted));
+  }
+
+  .tiptap-editor .code-block-codemirror .cm-activeLineGutter {
+    background: hsl(var(--code-gutter-active-bg));
+  }
+
+  .tiptap-editor pre code {
+    background: none;
+    color: hsl(var(--foreground));
+    padding: 0;
+    font-size: 0.9em;
+  }
+
+  /* Syntax highlighting (lowlight / highlight.js) – spans inside code get token colors */
+  .tiptap-editor pre code.hljs {
+    padding: 0;
+    background: transparent;
+  }
+  .tiptap-editor pre code .hljs-keyword,
+  .tiptap-editor pre code .hljs-selector-tag { color: hsl(var(--hljs-keyword)); }
+  .tiptap-editor pre code .hljs-string,
+  .tiptap-editor pre code .hljs-attr { color: hsl(var(--hljs-string)); }
+  .tiptap-editor pre code .hljs-number,
+  .tiptap-editor pre code .hljs-literal { color: hsl(var(--hljs-number)); }
+  .tiptap-editor pre code .hljs-comment,
+  .tiptap-editor pre code .hljs-quote { color: hsl(var(--hljs-comment)); }
+  .tiptap-editor pre code .hljs-title,
+  .tiptap-editor pre code .hljs-title.class_ { color: hsl(var(--hljs-title)); }
+  .tiptap-editor pre code .hljs-built_in,
+  .tiptap-editor pre code .hljs-type { color: hsl(var(--hljs-type)); }
+  .tiptap-editor pre code .hljs-function,
+  .tiptap-editor pre code .hljs-title.function_ { color: hsl(var(--hljs-function)); }
+  .tiptap-editor pre code .hljs-params { color: hsl(var(--foreground)); }
+  .tiptap-editor pre code .hljs-meta,
+  .tiptap-editor pre code .hljs-doctag { color: hsl(var(--hljs-meta)); }
+  .tiptap-editor pre code .hljs-tag,
+  .tiptap-editor pre code .hljs-name { color: hsl(var(--hljs-tag)); }
+  .tiptap-editor pre code .hljs-attribute { color: hsl(var(--hljs-attribute)); }
+  .tiptap-editor pre code .hljs-variable { color: hsl(var(--hljs-variable)); }
+  .tiptap-editor pre code .hljs-selector-class,
+  .tiptap-editor pre code .hljs-selector-id { color: hsl(var(--hljs-selector)); }
+  .tiptap-editor pre code .hljs-addition { color: hsl(var(--hljs-addition)); }
+  .tiptap-editor pre code .hljs-deletion { color: hsl(var(--hljs-deletion)); }
+
+  .tiptap-editor ul, .tiptap-editor ol {
+    padding-left: 1.5em;
+    margin: 0.5em 0 0.75em;
+  }
+
+  .tiptap-editor li {
+    margin: 0.25em 0;
+  }
+
+  .tiptap-editor ul[data-type="taskList"] {
+    padding-left: 0.25em;
+    list-style: none;
+  }
+
+  .tiptap-editor ul[data-type="taskList"] li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+
+  .tiptap-editor ul[data-type="taskList"] li label {
+    flex-shrink: 0;
+    margin-top: 0.15em;
+  }
+
+  .tiptap-editor ul[data-type="taskList"] li input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1.5px solid hsl(var(--border));
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    background: transparent;
+    transition: all 0.15s ease;
+  }
+
+  .tiptap-editor ul[data-type="taskList"] li input[type="checkbox"]:checked {
+    background: hsl(var(--primary));
+    border-color: hsl(var(--primary));
+  }
+
+  .tiptap-editor ul[data-type="taskList"] li input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .tiptap-editor mark {
+    background: hsl(var(--primary) / 0.25);
+    color: hsl(var(--foreground));
+    padding: 0 0.1em;
+    border-radius: 2px;
+  }
+
+  .tiptap-editor u {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .tiptap-editor hr {
+    border: none;
+    border-top: 1px solid hsl(var(--border));
+    margin: 2em 0;
+  }
+
+  /* Links */
+  .tiptap-link {
+    color: hsl(var(--primary));
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .tiptap-link:hover {
+    opacity: 0.8;
+  }
+
+  /* Images */
+  .tiptap-editor img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 1em 0;
+    border: 1px solid hsl(var(--border));
+  }
+
+  /* Tables */
+  .tiptap-editor table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 1.25em 0;
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid hsl(var(--border));
+  }
+
+  .tiptap-editor table td,
+  .tiptap-editor table th {
+    min-width: 1em;
+    border: 1px solid hsl(var(--border));
+    padding: 6px 12px;
+    vertical-align: top;
+    position: relative;
+    font-size: 0.9em;
+  }
+
+  .tiptap-editor table th {
+    font-weight: 600;
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    text-align: left;
+  }
+
+  .tiptap-editor table td {
+    background: hsl(var(--card));
+  }
+
+  .tiptap-editor table tr:hover td {
+    background: hsl(var(--accent));
+  }
+
+  .tiptap-editor .selectedCell:after {
+    z-index: 2;
+    position: absolute;
+    content: "";
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: hsl(var(--primary) / 0.15);
+    pointer-events: none;
+  }
+
+  /* Placeholder – Notion-style */
+  .tiptap-editor p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: hsl(var(--editor-muted) / 0.85);
+    pointer-events: none;
+    height: 0;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+  }
+
+  /* Block hover – Notion-style: subtle highlight + left accent */
+  .tiptap-editor > p,
+  .tiptap-editor > h1,
+  .tiptap-editor > h2,
+  .tiptap-editor > h3,
+  .tiptap-editor > blockquote,
+  .tiptap-editor > ul,
+  .tiptap-editor > ol,
+  .tiptap-editor > .code-block-codemirror-wrapper,
+  .tiptap-editor > table {
+    margin-left: -2px;
+    padding-left: 2px;
+    border-left: 2px solid transparent;
+    border-radius: 0 4px 4px 0;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .tiptap-editor > p:hover,
+  .tiptap-editor > h1:hover,
+  .tiptap-editor > h2:hover,
+  .tiptap-editor > h3:hover,
+  .tiptap-editor > blockquote:hover,
+  .tiptap-editor > ul:hover,
+  .tiptap-editor > ol:hover,
+  .tiptap-editor > .code-block-codemirror-wrapper:hover,
+  .tiptap-editor > table:hover {
+    background: hsl(var(--accent) / 0.25);
+    border-left-color: hsl(var(--primary) / 0.4);
+  }
+
+  /* Selection */
+  .tiptap-editor ::selection {
+    background: hsl(var(--primary) / 0.25);
+  }
+
+  /* Focus */
+  .tiptap-editor:focus-visible {
+    outline: none;
+  }
+}
+
+/* ===== SLASH COMMAND MENU (Notion-style) ===== */
+@layer components {
+  .slash-menu {
+    background: hsl(var(--popover));
+    border: 1px solid hsl(var(--border));
+    border-radius: 12px;
+    box-shadow: 0 12px 40px hsl(var(--overlay) / var(--overlay-alpha)), 0 0 0 1px hsl(var(--border) / 0.5);
+    padding: 6px 4px;
+    min-width: 280px;
+    max-height: 360px;
+    overflow-y: auto;
+  }
+
+  .slash-menu::-webkit-scrollbar {
+    width: 5px;
+  }
+  .slash-menu::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .slash-menu::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 5px;
+  }
+
+  .slash-menu-group-label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: hsl(var(--muted-foreground) / 0.9);
+    padding: 8px 12px 4px;
+  }
+
+  .slash-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    font-size: 0.875rem;
+  }
+
+  .slash-menu-item:hover,
+  .slash-menu-item.is-selected {
+    background: hsl(var(--accent));
+  }
+
+  .slash-menu-item .icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: hsl(var(--muted) / 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .slash-menu-item .label {
+    font-weight: 500;
+    color: hsl(var(--foreground));
+  }
+
+  .slash-menu-item .desc {
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.3;
+  }
+}
+
+/* ===== BUBBLE MENU (Notion-style floating toolbar) ===== */
+@layer components {
+  .bubble-menu {
+    background: hsl(var(--bubble-bg));
+    border: 1px solid hsl(var(--border));
+    border-radius: 10px;
+    box-shadow: 0 8px 28px hsl(var(--overlay) / var(--overlay-alpha)), 0 0 0 1px hsl(var(--border) / 0.6);
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .bubble-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+    font-size: 0.875rem;
+  }
+
+  .bubble-btn:hover {
+    background: hsl(var(--accent));
+    color: hsl(var(--foreground));
+  }
+
+  .bubble-btn.is-active {
+    background: hsl(var(--primary) / 0.2);
+    color: hsl(var(--primary));
+  }
+
+  .bubble-divider {
+    width: 1px;
+    height: 18px;
+    background: hsl(var(--border));
+    margin: 0 2px;
+  }
+
+  .editor-toolbar .toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    transition: background 0.1s, color 0.1s;
+    border-radius: 4px;
+  }
+
+  .editor-toolbar .toolbar-btn:hover {
+    background: hsl(var(--accent));
+    color: hsl(var(--foreground));
+  }
+}
+
+/* ===== ZEN MODE ===== */
+@layer components {
+  .zen-mode .sidebar-panel {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .zen-mode .right-sidebar-panel {
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .zen-mode .status-bar {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar-panel,
+  .right-sidebar-panel,
+  .status-bar {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* ===== TIPPY RESET ===== */
+.tippy-box {
+  background: transparent !important;
+  padding: 0 !important;
+}
+.tippy-content {
+  padding: 0 !important;
+}
