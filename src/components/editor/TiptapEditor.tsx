@@ -18,6 +18,7 @@ import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import { useEffect, useCallback, useRef, useState } from "react";
 import { useEditorStore } from "@/stores/editorStore";
+import { plainTextToHtml } from "@/lib/documentUtils";
 import { SlashCommand } from "./SlashCommand";
 import { EditorToolbar } from "./EditorToolbar";
 import {
@@ -184,10 +185,15 @@ export function TiptapEditor() {
   // Sync content when switching documents
   useEffect(() => {
     if (!editor || !activeDoc) return;
+    let content = activeDoc.content ?? "<p></p>";
+    if (content && !content.includes("<")) {
+      content = plainTextToHtml(content);
+      updateDocument(activeDoc.id, { content });
+    }
     const current = editor.getHTML();
-    if (current !== activeDoc.content) {
-      editor.commands.setContent(activeDoc.content ?? "<p></p>");
-      updateEditorStats(activeDoc.content ?? "");
+    if (current !== content) {
+      editor.commands.setContent(content);
+      updateEditorStats(content);
     }
   }, [activeDocumentId]); // eslint-disable-line
 

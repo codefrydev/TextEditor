@@ -90,9 +90,17 @@ export function CommandPalette() {
 
         {/* Actions */}
         <CommandGroup heading="Actions">
+          <CommandItem onSelect={() => run(() => createDocument(null, false, "txt"))}>
+            <Plus size={14} className="mr-2" />
+            New plain text (.txt)
+          </CommandItem>
+          <CommandItem onSelect={() => run(() => createDocument(null, false, "md"))}>
+            <Plus size={14} className="mr-2" />
+            New Markdown (.md)
+          </CommandItem>
           <CommandItem onSelect={() => run(() => createDocument(null, false))}>
             <Plus size={14} className="mr-2" />
-            New Document
+            New document
             <span className="ml-auto text-xs text-muted-foreground">Ctrl+N</span>
           </CommandItem>
           <CommandItem onSelect={() => run(() => createDocument(null, true))}>

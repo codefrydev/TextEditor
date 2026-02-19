@@ -1,6 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { useEditorStore, Document } from "@/stores/editorStore";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   ChevronRight,
   ChevronDown,
   File,
@@ -136,13 +142,7 @@ function DocItem({ doc, depth, searchQuery }: DocItemProps) {
             <Pencil size={10} />
           </button>
           {doc.isFolder && (
-            <button
-              className="p-0.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
-              onClick={() => createDocument(doc.id, false)}
-              title="New file"
-            >
-              <Plus size={10} />
-            </button>
+            <NewFileDropdown parentId={doc.id} triggerClassName="p-0.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground" iconSize={10} />
           )}
           <button
             className="p-0.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive"
@@ -162,6 +162,45 @@ function DocItem({ doc, depth, searchQuery }: DocItemProps) {
         </div>
       )}
     </div>
+  );
+}
+
+// ── New file type dropdown ────────────────────────────────────────────────────
+
+const FILE_TYPE_OPTIONS = [
+  { label: "Plain text (.txt)", extension: "txt" },
+  { label: "Markdown (.md)", extension: "md" },
+  { label: "Document", extension: undefined },
+] as const;
+
+function NewFileDropdown({
+  parentId = null,
+  triggerClassName,
+  iconSize = 14,
+}: {
+  parentId: string | null;
+  triggerClassName?: string;
+  iconSize?: number;
+}) {
+  const createDocument = useEditorStore((s) => s.createDocument);
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className={triggerClassName} title="New file">
+          <Plus size={iconSize} />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        {FILE_TYPE_OPTIONS.map((opt) => (
+          <DropdownMenuItem
+            key={opt.label}
+            onSelect={() => createDocument(parentId, false, opt.extension)}
+          >
+            {opt.label}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -208,13 +247,7 @@ export function DocumentSidebar() {
           Documents
         </span>
         <div className="flex items-center gap-1">
-          <button
-            onClick={() => createDocument(null, false)}
-            className="p-1 rounded hover:bg-sidebar-accent text-muted-foreground hover:text-foreground transition-colors"
-            title="New document"
-          >
-            <Plus size={14} />
-          </button>
+          <NewFileDropdown parentId={null} triggerClassName="p-1 rounded hover:bg-sidebar-accent text-muted-foreground hover:text-foreground transition-colors" iconSize={14} />
           <button
             onClick={() => createDocument(null, true)}
             className="p-1 rounded hover:bg-sidebar-accent text-muted-foreground hover:text-foreground transition-colors"

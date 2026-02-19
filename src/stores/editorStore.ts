@@ -1,5 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import {
+  getDocumentExtension,
+  htmlToPlainText,
+  plainTextToHtml,
+} from "@/lib/documentUtils";
 
 export interface Document {
   id: string;
@@ -31,7 +36,7 @@ interface EditorState {
   contentHealthScore: number;
 
   // Actions
-  createDocument: (parentId?: string | null, isFolder?: boolean) => string;
+  createDocument: (parentId?: string | null, isFolder?: boolean, extension?: string) => string;
   updateDocument: (id: string, updates: Partial<Document>) => void;
   deleteDocument: (id: string) => void;
   setActiveDocument: (id: string) => void;
@@ -99,12 +104,23 @@ export const useEditorStore = create<EditorState>()(
       readingTime: 1,
       contentHealthScore: 75,
 
-      createDocument: (parentId = null, isFolder = false) => {
+      createDocument: (parentId = null, isFolder = false, extension?: string) => {
         const id = generateId();
+        const isTxt = extension?.toLowerCase() === "txt";
+        const title = isFolder
+          ? "New Folder"
+          : extension
+            ? `Untitled.${extension.toLowerCase()}`
+            : "Untitled";
+        const content = isFolder
+          ? ""
+          : isTxt
+            ? ""
+            : "<p></p>";
         const doc: Document = {
           id,
-          title: isFolder ? "New Folder" : "Untitled",
-          content: isFolder ? "" : "<p></p>",
+          title,
+          content,
           parentId,
           isFolder,
           createdAt: Date.now(),
@@ -165,12 +181,34 @@ export const useEditorStore = create<EditorState>()(
       setRightSidebarTab: (tab) => set({ rightSidebarTab: tab }),
 
       renameDocument: (id, title) => {
-        set((state) => ({
-          documents: {
-            ...state.documents,
-            [id]: { ...state.documents[id], title, updatedAt: Date.now() },
-          },
-        }));
+        const trimmed = title.trim() || "Untitled";
+        set((state) => {
+          const doc = state.documents[id];
+          if (!doc) return state;
+          const prevExt = getDocumentExtension(doc);
+          const nextExt =
+            trimmed.includes(".") &&
+            /^[a-z0-9]+$/i.test(trimmed.split(".").pop() ?? "")
+              ? (trimmed.split(".").pop()?.toLowerCase() ?? null)
+              : null;
+          let content = doc.content;
+          if (prevExt === "txt" && nextExt !== "txt") {
+            content = plainTextToHtml(doc.content);
+          } else if (prevExt !== "txt" && nextExt === "txt") {
+            content = htmlToPlainText(doc.content);
+          }
+          return {
+            documents: {
+              ...state.documents,
+              [id]: {
+                ...doc,
+                title: trimmed,
+                content,
+                updatedAt: Date.now(),
+              },
+            },
+          };
+        });
       },
 
       updateEditorStats: (content) => {

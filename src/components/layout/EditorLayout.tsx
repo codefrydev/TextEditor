@@ -3,6 +3,14 @@ import { useEditorStore } from "@/stores/editorStore";
 import { DocumentSidebar } from "@/components/sidebar/DocumentSidebar";
 import { AISidebar } from "@/components/sidebar/AISidebar";
 import { TiptapEditor } from "@/components/editor/TiptapEditor";
+import { PlainTextEditor } from "@/components/editor/PlainTextEditor";
+import { getDocumentExtension } from "@/lib/documentUtils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { StatusBar } from "@/components/editor/StatusBar";
 import { CommandPalette } from "@/components/CommandPalette";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -34,6 +42,8 @@ export function EditorLayout() {
   } = useEditorStore();
 
   const activeDoc = activeDocumentId ? documents[activeDocumentId] : null;
+  const isPlain =
+    activeDoc && getDocumentExtension(activeDoc) === "txt";
 
   // Ctrl+K for Zen Mode, Ctrl+N for new doc
   const handleKeyDown = useCallback(
@@ -109,13 +119,27 @@ export function EditorLayout() {
             <span>Ctrl+P</span>
           </button>
 
-          <button
-            onClick={() => createDocument(null, false)}
-            className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-            title="New document (Ctrl+N)"
-          >
-            <Plus size={15} />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                title="New file (Ctrl+N)"
+              >
+                <Plus size={15} />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onSelect={() => createDocument(null, false, "txt")}>
+                Plain text (.txt)
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => createDocument(null, false, "md")}>
+                Markdown (.md)
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => createDocument(null, false)}>
+                Document
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <button
             onClick={() => {
@@ -161,7 +185,7 @@ export function EditorLayout() {
 
         {/* Editor */}
         <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-          <TiptapEditor />
+          {isPlain ? <PlainTextEditor /> : <TiptapEditor />}
         </main>
 
         {/* Right Sidebar */}
