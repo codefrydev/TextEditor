@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { StatusBar } from "@/components/editor/StatusBar";
 import { CommandPalette } from "@/components/CommandPalette";
+import { AISettingsDialog } from "@/components/AISettingsDialog";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   PanelLeft,
@@ -226,6 +227,9 @@ export function EditorLayout() {
 
       {/* Global Command Palette */}
       <CommandPalette />
+
+      {/* AI Settings modal (opened from Command Palette) */}
+      <AISettingsDialog />
     </div>
   );
 }

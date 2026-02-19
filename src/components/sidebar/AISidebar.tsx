@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useEditorStore } from "@/stores/editorStore";
+import { useAISettingsStore } from "@/stores/aiSettingsStore";
+import { generateReply } from "@/lib/ai";
+import { toast } from "@/components/ui/use-toast";
 import {
   Sparkles,
   Send,
   RefreshCw,
-  FileText,
   Wand2,
-  ChevronDown,
 } from "lucide-react";
 
 type AIAction = "rewrite" | "summarize" | "expand" | "fix" | "custom";
@@ -26,6 +27,7 @@ interface Message {
 export function AISidebar() {
   const { activeDocumentId, documents } = useEditorStore();
   const activeDoc = activeDocumentId ? documents[activeDocumentId] : null;
+  const { apiKey, provider, model, hasValidConfig } = useAISettingsStore();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -43,7 +45,8 @@ export function AISidebar() {
   };
 
   const sendMessage = async (userMessage: string, action?: AIAction) => {
-    if (!userMessage.trim()) return;
+    if (!userMessage.trim() && !action) return;
+    if (isLoading) return; // prevent double submission (e.g. double-click or Enter + click)
     setIsLoading(true);
 
     const docText = getDocText();
@@ -70,20 +73,44 @@ export function AISidebar() {
     setMessages(newMessages);
     setInput("");
 
-    // Mock AI response for demo (replace with real LLM call when Cloud is enabled)
-    await new Promise((r) => setTimeout(r, 1200));
-    const mockResponses: Record<AIAction | "custom", string> = {
-      rewrite: "Here's a rewritten version of your content with improved clarity and professional tone. The structure has been maintained while the language is more precise and engaging.",
-      summarize: `**Summary of "${activeDoc?.title}"**\n\nThis document covers the main concepts with clear explanations. Key points include the core ideas presented in the opening sections, followed by practical implementation details.`,
-      expand: "I've expanded your content with additional context, examples, and supporting details to make it more comprehensive and informative for your readers.",
-      fix: "I've reviewed your document and corrected grammatical errors, improved sentence structure, and enhanced the overall flow for better readability.",
-      custom: `I understand your request: "${userMessage}". Based on the context of your document, here's my response with relevant suggestions and improvements.`,
-    };
-
-    const assistantMsg = mockResponses[action ?? "custom"];
-    setMessages([...newMessages, { role: "assistant", content: assistantMsg }]);
-    setIsLoading(false);
-    setSelectedAction(null);
+    try {
+      if (hasValidConfig()) {
+        const assistantMsg = await generateReply({
+          provider,
+          apiKey: apiKey.trim(),
+          systemPrompt: systemContext,
+          userMessage: fullUserMsg,
+          model: model || undefined,
+        });
+        setMessages([...newMessages, { role: "assistant", content: assistantMsg }]);
+      } else {
+        await new Promise((r) => setTimeout(r, 1200));
+        const mockResponses: Record<AIAction | "custom", string> = {
+          rewrite: "Here's a rewritten version of your content with improved clarity and professional tone. The structure has been maintained while the language is more precise and engaging.",
+          summarize: `**Summary of "${activeDoc?.title}"**\n\nThis document covers the main concepts with clear explanations. Key points include the core ideas presented in the opening sections, followed by practical implementation details.`,
+          expand: "I've expanded your content with additional context, examples, and supporting details to make it more comprehensive and informative for your readers.",
+          fix: "I've reviewed your document and corrected grammatical errors, improved sentence structure, and enhanced the overall flow for better readability.",
+          custom: `I understand your request: "${userMessage}". Based on the context of your document, here's my response with relevant suggestions and improvements.`,
+        };
+        const assistantMsg = mockResponses[action ?? "custom"];
+        setMessages([...newMessages, { role: "assistant", content: assistantMsg }]);
+        toast({
+          title: "Using demo mode",
+          description: "Add an API key in Settings (Ctrl+P → AI Settings) to use real AI.",
+        });
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Something went wrong.";
+      setMessages([...newMessages, { role: "assistant", content: `Error: ${message}` }]);
+      toast({
+        title: "AI request failed",
+        description: message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+      setSelectedAction(null);
+    }
   };
 
   return (
@@ -163,7 +190,7 @@ export function AISidebar() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
+              if (e.key === "Enter" && !e.shiftKey && !isLoading) {
                 e.preventDefault();
                 sendMessage(input);
               }

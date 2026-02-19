@@ -25,7 +25,9 @@ import {
   Sun,
   Moon,
   Monitor,
+  Settings,
 } from "lucide-react";
+import { useAISettingsStore } from "@/stores/aiSettingsStore";
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false);
@@ -44,6 +46,7 @@ export function CommandPalette() {
     toggleRightSidebar,
     setRightSidebarTab,
   } = useEditorStore();
+  const setOpenAISettings = useAISettingsStore((s) => s.setOpenAISettings);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -138,6 +141,18 @@ export function CommandPalette() {
           <CommandItem onSelect={() => run(toggleRightSidebar)}>
             <PanelRight size={14} className="mr-2" />
             {isRightSidebarOpen ? "Hide" : "Show"} Right Panel
+          </CommandItem>
+        </CommandGroup>
+
+        <CommandSeparator />
+
+        <CommandSeparator />
+
+        {/* Settings */}
+        <CommandGroup heading="Settings">
+          <CommandItem onSelect={() => run(() => setOpenAISettings(true))}>
+            <Settings size={14} className="mr-2" />
+            AI Settings (API key &amp; provider)
           </CommandItem>
         </CommandGroup>
 
